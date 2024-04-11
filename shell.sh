@@ -4,32 +4,42 @@
 GITHUB_REPO="https://github.com/Frikh-Said/Automatisation-SHELL.git"
 # Docker Hub username
 DOCKERHUB_USER="suzuya8"
-# Docker image name
-IMAGE_NAME="todo-app"
 # Docker Hub repository
 DOCKERHUB_REPO="todo-app"
+# Docker image name
+IMAGE_NAME="todo-app"
+# File to store the version
+VERSION_FILE="./version.txt"
 
-# Define initial version
-
-VERSION="1.0"
+# Read the current version from the file
+if [ -f $VERSION_FILE ]; then
+    VERSION=$(cat $VERSION_FILE)
+else
+    # If the file doesn't exist, start with version 1.0
+    VERSION="1.0"
+fi
 
 # Clone the GitHub repository
-git pull $GITHUB_REPO
-cd ~/app
+git pull
+cd ./app
 
 # Build the Docker image
-docker build -t $IMAGE_NAME .
+sudo docker build -t $IMAGE_NAME .
 
+cd ..
 # Log in to Docker Hub
-cat my_password.txt | docker login --username $DOCKERHUB_USER --password-stdin
+sudo cat my_password.txt | docker login --username $DOCKERHUB_USER --password-stdin
+#sudo docker login docker.io
 
 # Tag the Docker image
-docker tag $IMAGE_NAME $DOCKERHUB_USER/$DOCKERHUB_REPO:$VERSION
+sudo docker tag $IMAGE_NAME $DOCKERHUB_USER/$DOCKERHUB_REPO:$VERSION
 
 # Push the Docker image to Docker Hub
-docker push $DOCKERHUB_USER/$DOCKERHUB_REPO:$VERSION
+sudo docker push $DOCKERHUB_USER/$DOCKERHUB_REPO:$VERSION
 
-VERSION=$((VERSION + 1))
+# Increment version for next build and write to file
+NEXT_VERSION=$(echo "$VERSION + 0.1" | bc)
+echo $NEXT_VERSION > $VERSION_FILE
 
-
+docker run -p 3000:3000 $IMAGE_NAME
 
