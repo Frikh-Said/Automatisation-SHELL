@@ -11,16 +11,17 @@ log_message() {
 # Log start of deployment
 log_message "Starting deployment process..."
 
-# GitHub repository URL
-GITHUB_REPO="https://github.com/Frikh-Said/Automatisation-SHELL.git"
 # Docker Hub username
 DOCKERHUB_USER="suzuya8"
+
 # Docker Hub repository
 DOCKERHUB_REPO="todo-app"
+
 # Docker image name
 IMAGE_NAME="todo-app"
+
 # File to store the version
-ERSION_FILE="home/ubuntu/Automatisation-SHELL/version.txt"
+VERSION_FILE="home/ubuntu/Automatisation-SHELL/version.txt"
 
 # Read the current version from the file
 if [ -f $VERSION_FILE ]; then
